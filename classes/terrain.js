@@ -1,22 +1,21 @@
 class Terrain{
     constructor(){
-        this.x = 0;
-        this.y = height-50;
-        this.col = color(30, 200, 40);
+        this.body = Matter.Bodies.rectangle(worldWidth/2, height - 40, worldWidth, 80, {firction: 0.8,isStatic: true});
+        
+        this.col = color(0,0,0);
+        Matter.World.addBody(world, this.body);
+
+        //console.log(this.body);
     }
 
     draw(){
         fill(this.col);
         noStroke();
-        rect(this.x, this.y, width, height);
-    }
 
-    collides(object){
-        if(object.pos.y + object.h >= this.y){
-            return true;
+        beginShape();
+        for(let i=0; i<this.body.vertices.length;i++){
+            vertex(this.body.vertices[i].x, this.body.vertices[i].y);
         }
-        else{
-            return false;
-        }
+        endShape(CLOSE);
     }
 }
