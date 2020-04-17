@@ -1,112 +1,110 @@
 class Vehicle{
     constructor(x, y, w, h, wSize, col){
         this.col = col;
-        this.tyreGrip = 0.9;
-        this.springStiffness = 0.1;
-        this.springDamping = 0.01;
-        this.springHeight = 50;
+        this.rTyreGrip = 1;
+        this.fTyreGrip = 1;
+
+        this.rStiffness = 0.03;
+        this.rDamping = 0.2;
+        this.rSpringHeight = 50;
+        this.fStiffness = 0.03;
+        this.fDamping = 0.2;
+        this.fSpringHeight = 50;
+        this.w = w;
+        this.wSize = wSize;
 
         this.parts = [];
-        this.parts.push(Matter.Bodies.rectangle(x, y, w + w/2, h));
-
-        this.options = {
-            friction: this.tyreGrip,
-            restitution: 0.8,
-        }
-
-        this.parts.push(Matter.Bodies.circle(x - w/2 + wSize, y + h*2, wSize, this.options));
-        this.parts.push(Matter.Bodies.circle(x + w/2 - wSize, y + h*2, wSize, this.options));
-
-        Matter.World.add(world, this.parts);
-
         this.suspension = [];
+        
+        // Bottom Layer (Frame and Suspension)
 
+        // Frame
         this.options = {
+            density: 0.001
+        }
+
+        this.parts.push(Matter.Bodies.rectangle(x, y, w, h, this.options)); // Frame
+        this.parts[0].collisionFilter.group = -1;
+
+        // Rear
+        this.options = {
+            friction: this.rTyreGrip,
+            restitution: 0.75,
+            slop: 0.2,
+
+        }
+        this.parts.push(Matter.Bodies.circle(x - w/2, y + wSize, wSize, this.options)); // Rear Wheel
+        this.parts[1].collisionFilter.group = -1;
+
+        this.options = { // Main Strut
             bodyA: this.parts[0],
-            pointA: {
-                x: -w/2 + wSize,
-                y: 0
-            },
             bodyB: this.parts[1],
-            length: this.springHeight,
-            stiffness: this.springStiffness,
-            damping: this.springDamping,
-        }
-
-        this.suspension.push(Matter.Constraint.create(this.options));
-
-        this.options = {
-            bodyA: this.parts[0],
             pointA: {
-                x: w/2 - wSize,
+                x: - w/2,
                 y: 0
             },
-            bodyB: this.parts[2],
-            length: this.springHeight,
-            stiffness: this.springStiffness,
-            damping: this.springDamping,
+            stiffness: this.rStiffness,
+            damping: this.rDamping,
+            friction: this.fTyreGrip,
         }
-
         this.suspension.push(Matter.Constraint.create(this.options));
 
-        // this.options = {
-        //     bodyA: this.parts[1],
-        //     bodyB: this.parts[2],
-        //     stiffness: 1,
-        //     damping: 0,
-        // }
-
-        // this.suspension.push(Matter.Constraint.create(this.options));
-
-        // this.options = {
-        //     bodyA: this.parts[0],
-        //     bodyB: this.parts[1],
-        //     stiffness: this.springStiffness,
-        //     damping: this.springDamping,
-        // }
-
-        // this.suspension.push(Matter.Constraint.create(this.options));
-
-        // this.options = {
-        //     bodyA: this.parts[0],
-        //     bodyB: this.parts[2],
-        //     stiffness: this.springStiffness,
-        //     damping: this.springDamping,
-        // }
-
-        // this.suspension.push(Matter.Constraint.create(this.options));
-
-        this.options = {
+        this.options = { // Support Strut
             bodyA: this.parts[0],
-            pointA: {
-                x: -(3*w)/4,
-                y: 0
-            },
-            length: sqrt(sq(wSize*3) + sq(this.springHeight)),
-
             bodyB: this.parts[1],
-            stiffness: 1,
-            damping: 0,
-        }
-
-        this.suspension.push(Matter.Constraint.create(this.options));
-
-        this.options = {
-            bodyA: this.parts[0],
             pointA: {
-                x: (3*w)/4,
+                x: - w/8,
                 y: 0
             },
-            length: sqrt(sq(wSize*3) + sq(this.springHeight)),
-            bodyB: this.parts[2],
-            stiffness: 1,
-            damping: 0,
         }
-
         this.suspension.push(Matter.Constraint.create(this.options));
 
-        //console.log(this.suspension);
+        // Front
+        this.options = {
+            friction: this.rTyreGrip,
+            restitution: 0.75,
+            slop: 0.2,
+
+        }
+        this.parts.push(Matter.Bodies.circle(x + w/2, y + wSize, wSize, this.options)); // Front Wheel
+        this.parts[2].collisionFilter.group = -1;
+
+        this.options = { // Main Strut
+            bodyA: this.parts[0],
+            bodyB: this.parts[2],
+            pointA: {
+                x: w/2,
+                y: 0
+            },
+            stiffness: this.fStiffness,
+            damping: this.fDamping,
+        }
+        this.suspension.push(Matter.Constraint.create(this.options));
+
+        this.options = { // Support Strut
+            bodyA: this.parts[0],
+            bodyB: this.parts[2],
+            pointA: {
+                x: w/8,
+                y: 0
+            },
+        }
+        this.suspension.push(Matter.Constraint.create(this.options));
+
+
+        console.log(this.parts);
+        Matter.World.add(world, this.parts);
         Matter.World.add(world, this.suspension);
+    }
+
+    update(){
+        // let activeHeight = dist(this.suspension[0].bodyA.position.x + this.suspension[0].pointA.x, this.suspension[0].bodyA.position.y + this.suspension[0].pointA.y, this.suspension[0].bodyB.position.x + this.suspension[0].pointB.x, this.suspension[0].bodyB.position.y + this.suspension[0].pointB.y);
+        // this.suspension[2].length = sqrt(sq(this.w/2 - this.wSize)+sq(activeHeight));
+
+        // activeHeight = dist(this.suspension[1].bodyA.position.x + this.suspension[1].pointA.x, this.suspension[1].bodyA.position.y + this.suspension[1].pointA.y, this.suspension[1].bodyB.position.x + this.suspension[1].pointB.x, this.suspension[1].bodyB.position.y + this.suspension[1].pointB.y);
+        // this.suspension[3].length = sqrt(sq(this.w/2 - this.wSize)+sq(activeHeight));
+
+        //this.parts[2].
     }
 
     draw(){
@@ -124,14 +122,16 @@ class Vehicle{
 
         }
 
-        stroke(0);
-        strokeWeight(2);
-        line(this.parts[1].position.x, this.parts[1].position.y, this.parts[1].vertices[0].x, this.parts[1].vertices[0].y);
-        line(this.parts[2].position.x, this.parts[2].position.y, this.parts[2].vertices[0].x, this.parts[2].vertices[0].y);
+        // stroke(0);
+        // strokeWeight(2);
+        // line(this.parts[1].position.x, this.parts[1].position.y, this.parts[1].vertices[0].x, this.parts[1].vertices[0].y);
+        // line(this.parts[2].position.x, this.parts[2].position.y, this.parts[2].vertices[0].x, this.parts[2].vertices[0].y);
 
 
         stroke(255,0,0);
         strokeWeight(3);
+
+
         for(let i = 0; i < this.suspension.length; i++){
             line(this.suspension[i].bodyA.position.x + this.suspension[i].pointA.x, this.suspension[i].bodyA.position.y + this.suspension[i].pointA.y, this.suspension[i].bodyB.position.x + this.suspension[i].pointB.x, this.suspension[i].bodyB.position.y + this.suspension[i].pointB.y)
         }
