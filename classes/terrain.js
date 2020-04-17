@@ -1,6 +1,6 @@
 class Terrain{
     constructor(){
-        this.body = Matter.Bodies.rectangle(worldWidth/2, height - 40, worldWidth, 80, {friction: 1, staticFriction: 1,isStatic: true});
+        this.body = Matter.Bodies.rectangle(worldWidth/2, height - 40, worldWidth, 80, {restitution: 0.1, friction: 1, staticFriction: 1,isStatic: true});
         
         Matter.World.addBody(world, this.body);
         

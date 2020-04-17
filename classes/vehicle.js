@@ -4,11 +4,11 @@ class Vehicle{
         this.rTyreGrip = 1;
         this.fTyreGrip = 1;
 
-        this.rStiffness = 0.03;
-        this.rDamping = 0.2;
+        this.rStiffness = 0.1;
+        this.rDamping = 0.1;
         this.rSpringHeight = 50;
-        this.fStiffness = 0.03;
-        this.fDamping = 0.2;
+        this.fStiffness = 0.1;
+        this.fDamping = 0.1;
         this.fSpringHeight = 50;
         this.w = w;
         this.wSize = wSize;
@@ -20,7 +20,7 @@ class Vehicle{
 
         // Frame
         this.options = {
-            density: 0.001
+            density: 0.01
         }
 
         this.parts.push(Matter.Bodies.rectangle(x, y, w, h, this.options)); // Frame
@@ -29,11 +29,9 @@ class Vehicle{
         // Rear
         this.options = {
             friction: this.rTyreGrip,
-            restitution: 0.75,
-            slop: 0.2,
-
+            //restitution: 0.1,
         }
-        this.parts.push(Matter.Bodies.circle(x - w/2, y + wSize, wSize, this.options)); // Rear Wheel
+        this.parts.push(Matter.Bodies.circle(x - w/2  , y + wSize, wSize, this.options)); // Rear Wheel
         this.parts[1].collisionFilter.group = -1;
 
         this.options = { // Main Strut
@@ -45,7 +43,7 @@ class Vehicle{
             },
             stiffness: this.rStiffness,
             damping: this.rDamping,
-            friction: this.fTyreGrip,
+            length: this.rSpringHeight,
         }
         this.suspension.push(Matter.Constraint.create(this.options));
 
@@ -53,18 +51,20 @@ class Vehicle{
             bodyA: this.parts[0],
             bodyB: this.parts[1],
             pointA: {
-                x: - w/8,
-                y: 0
+                x: - w/3,
+                y: h *4
             },
+            length: w/5,
+            stiffness: 1,
+            damping: 0,
         }
         this.suspension.push(Matter.Constraint.create(this.options));
+
 
         // Front
         this.options = {
             friction: this.rTyreGrip,
-            restitution: 0.75,
-            slop: 0.2,
-
+            //restitution: 0.1,
         }
         this.parts.push(Matter.Bodies.circle(x + w/2, y + wSize, wSize, this.options)); // Front Wheel
         this.parts[2].collisionFilter.group = -1;
@@ -78,6 +78,7 @@ class Vehicle{
             },
             stiffness: this.fStiffness,
             damping: this.fDamping,
+            length: this.fSpringHeight,
         }
         this.suspension.push(Matter.Constraint.create(this.options));
 
@@ -85,14 +86,19 @@ class Vehicle{
             bodyA: this.parts[0],
             bodyB: this.parts[2],
             pointA: {
-                x: w/8,
-                y: 0
+                x: w/3,
+                y: h *4
             },
+            length: w/5,
+            stiffness: 1,
+            damping: 0,
         }
         this.suspension.push(Matter.Constraint.create(this.options));
 
 
+        console.log(this.suspension);
         console.log(this.parts);
+
         Matter.World.add(world, this.parts);
         Matter.World.add(world, this.suspension);
     }
@@ -122,10 +128,10 @@ class Vehicle{
 
         }
 
-        // stroke(0);
-        // strokeWeight(2);
-        // line(this.parts[1].position.x, this.parts[1].position.y, this.parts[1].vertices[0].x, this.parts[1].vertices[0].y);
-        // line(this.parts[2].position.x, this.parts[2].position.y, this.parts[2].vertices[0].x, this.parts[2].vertices[0].y);
+        stroke(0);
+        strokeWeight(2);
+        line(this.parts[1].position.x, this.parts[1].position.y, this.parts[1].vertices[0].x, this.parts[1].vertices[0].y);
+        line(this.parts[2].position.x, this.parts[2].position.y, this.parts[2].vertices[0].x, this.parts[2].vertices[0].y);
 
 
         stroke(255,0,0);
