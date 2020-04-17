@@ -10,8 +10,7 @@ function setup() {
   world = engine.world;
 
   terrain = new Terrain();
-  vehicle = new Vehicle(200, 10, 200, 10, 30, color(0,0,0, 70)); // x, y, w, h, wSize, col
-
+  vehicle = new Vehicle(200, -500, 200, 10, 30, color(0,0,0, 70)); // x, y, w, h, wSize, col
 }
 
 function draw() {
@@ -19,7 +18,7 @@ function draw() {
   background(color(170,220,255));
   push();
   
-  let mapPos = map(vehicle.parts[0].position.x, 200, 20000, 100, 300);
+  let mapPos = map(vehicle.parts[0].position.x, 200, worldWidth, 100, 300);
   fill(200,200,160);
   rect(100, 0, 200, 20);
   fill(0);
@@ -30,7 +29,6 @@ function draw() {
   text("R wheel Rot speed: " + nf(vehicle.parts[1].angularSpeed,2,3), 10, 65);
   text("F wheel Rot speed: " + nf(vehicle.parts[2].angularSpeed,2,3), 10, 80);
   
-
   pop();
 
   translate(-vehicle.parts[0].position.x + width/2, -vehicle.parts[0].position.y + height/2);
@@ -57,6 +55,9 @@ function draw() {
 }
 
 function mousePressed(){
-  //objects.push(new Wall(mouseX - vehicle.parts[0].position.x, mouseY, 20,20,0,color(0,0,0)));
+  let newX = map(mouseX, 0, width, vehicle.parts[0].position.x - width/2, vehicle.parts[0].position.x + width/2);
+  let newY = map(mouseY, 0, height, vehicle.parts[0].position.y - height/2, vehicle.parts[0].position.y + height/2);
+
+  objects.push(new Wall(newX, newY, 20,20,0,color(random(255),random(255),random(255))));
 }
 

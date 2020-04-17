@@ -96,8 +96,8 @@ class Vehicle{
         this.suspension.push(Matter.Constraint.create(this.options));
 
 
-        console.log(this.suspension);
-        console.log(this.parts);
+        // console.log(this.suspension);
+        // console.log(this.parts);
 
         Matter.World.add(world, this.parts);
         Matter.World.add(world, this.suspension);
