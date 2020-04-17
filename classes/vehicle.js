@@ -4,11 +4,11 @@ class Vehicle{
         this.rTyreGrip = 1;
         this.fTyreGrip = 1;
 
-        this.rStiffness = 0.1;
-        this.rDamping = 0.1;
+        this.rStiffness = 0.05;
+        this.rDamping = 0.05;
         this.rSpringHeight = 50;
         this.fStiffness = 0.1;
-        this.fDamping = 0.1;
+        this.fDamping = 0.05;
         this.fSpringHeight = 50;
         this.w = w;
         this.wSize = wSize;
@@ -60,6 +60,19 @@ class Vehicle{
         }
         this.suspension.push(Matter.Constraint.create(this.options));
 
+        this.options = { // Support Strut
+            bodyA: this.parts[0],
+            bodyB: this.parts[1],
+            pointA: {
+                x: - w/3,
+                y: h *2
+            },
+            length: w/5,
+            stiffness: 0.1,
+            damping: 0,
+        }
+        this.suspension.push(Matter.Constraint.create(this.options));
+
 
         // Front
         this.options = {
@@ -91,6 +104,19 @@ class Vehicle{
             },
             length: w/5,
             stiffness: 1,
+            damping: 0,
+        }
+        this.suspension.push(Matter.Constraint.create(this.options));
+
+        this.options = { // Support Strut
+            bodyA: this.parts[0],
+            bodyB: this.parts[2],
+            pointA: {
+                x: w/3,
+                y: h *2
+            },
+            length: w/5,
+            stiffness: 0.1,
             damping: 0,
         }
         this.suspension.push(Matter.Constraint.create(this.options));

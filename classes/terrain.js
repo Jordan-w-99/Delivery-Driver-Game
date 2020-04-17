@@ -7,11 +7,17 @@ class Terrain{
         this.terrain = [];
         this.newTerrain = [];
 
-        for(let xOff = 0; xOff < 100; xOff ++){
-            this.newTerrain.push({
-                x: map(xOff, 0, 99, 0, worldWidth),
-                y: map(noise(xOff), 0, 1, 0, -200)
-            });
+        noiseDetail(2, 0.5)
+        let xOff = 0;
+        for(let i = 0; i < 3000; i ++){
+            if(xOff < 3000){
+                this.newTerrain.push({
+                    x: map(xOff, 0, 2999, 0, worldWidth),
+                    y: map(noise(xOff), 0, 1, -50, -200)
+                });
+            }
+            xOff += random(5);
+
         }
 
         for(let i = 1; i < this.newTerrain.length; i ++){
@@ -23,14 +29,6 @@ class Terrain{
             ]
 
             let COM = Matter.Vertices.centre(vertices);
-
-            // this.terrain.push(Matter.Bodies.polygon(COM.x, COM.y, 4, 100, {isStatic: true}));
-            
-            //     for(let j = 0; j<4; j++){
-            //         this.terrain[i-1].vertices[j].x = vertices[j].x
-            //         this.terrain[i-1].vertices[j].y = vertices[j].y
-            //     }
-
             
             this.terrain.push(Matter.Bodies.fromVertices(COM.x, COM.y, vertices, {isStatic: true}));
         }
@@ -62,23 +60,5 @@ class Terrain{
             endShape();
         }
         noStroke();
-
-        // beginShape();
-        // for(let i=0; i<this.newTerrain.length;i++){
-        //         vertex(this.newTerrain.x, this.newTerrain.y);
-        // }
-        // endShape(CLOSE);
     }
-
-    // generate(){
-    //     let newTerrain = [];
-
-    //     for(let xOff = 0; xOff < 100; xOff ++){
-    //         newTerrain.push(createVector(xOff,noise(xOff)));
-    //     }
-
-    //     for(let i = 0; i < newTerrain.length; i ++){
-    //         this.terrain.push(createVector(map(newTerrain[i].x, 0, 100, 0, worldWidth), map(newTerrain[i].y, 0, 1,height-40, height-90)));
-    //     }
-    // }
 }

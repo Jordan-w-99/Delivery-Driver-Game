@@ -1,4 +1,4 @@
-let worldWidth = 20000;
+let worldWidth = 200000;
 let terrain, vehicle, wall;
 let world, engine;
 let objects = [];
@@ -10,7 +10,7 @@ function setup() {
   world = engine.world;
 
   terrain = new Terrain();
-  vehicle = new Vehicle(200, -500, 200, 10, 30, color(0,0,0, 70)); // x, y, w, h, wSize, col
+  vehicle = new Vehicle(200, -500, 150, 10, 30, color(0,0,0, 70)); // x, y, w, h, wSize, col
 }
 
 function draw() {
