@@ -6,10 +6,10 @@ class Vehicle{
 
         this.rStiffness = 0.05;
         this.rDamping = 0.05;
-        this.rSpringHeight = 50;
+        this.rSpringHeight = 70;
         this.fStiffness = 0.1;
         this.fDamping = 0.05;
-        this.fSpringHeight = 50;
+        this.fSpringHeight = 70;
         this.w = w;
         this.wSize = wSize;
 
@@ -144,15 +144,15 @@ class Vehicle{
         noStroke(); 
      
 
-        for(let i = 0; i < this.parts.length; i++){
+        //for(let i = 0; i < this.parts.length; i++){
             beginShape();
-            for(let j = 0; j < this.parts[i].vertices.length; j++){
-                vertex(this.parts[i].vertices[j].x, this.parts[i].vertices[j].y);
+            for(let j = 0; j < this.parts[0].vertices.length; j++){
+                vertex(this.parts[0].vertices[j].x, this.parts[0].vertices[j].y);
             }
 
             endShape(CLOSE);
 
-        }
+        //}
 
         stroke(0);
         strokeWeight(2);
@@ -163,9 +163,32 @@ class Vehicle{
         stroke(255,0,0);
         strokeWeight(3);
 
+        // R wheel
+        push();
+        imageMode(CENTER);
+        translate(this.parts[1].position.x, this.parts[1].position.y);
+        rotate(this.parts[1].angle);
+        image(wheelImg, 0, 0, this.wSize*2, this.wSize*2);
+        pop();
+        
+        // F wheel
+        push();
+        imageMode(CENTER);
+        translate(this.parts[2].position.x, this.parts[2].position.y);
+        rotate(this.parts[2].angle);
+        image(wheelImg, 0, 0, this.wSize*2, this.wSize*2);
+        pop();
 
-        for(let i = 0; i < this.suspension.length; i++){
-            line(this.suspension[i].bodyA.position.x + this.suspension[i].pointA.x, this.suspension[i].bodyA.position.y + this.suspension[i].pointA.y, this.suspension[i].bodyB.position.x + this.suspension[i].pointB.x, this.suspension[i].bodyB.position.y + this.suspension[i].pointB.y)
-        }
+        // Body
+        push();
+        imageMode(CENTER);
+        translate(this.parts[0].position.x, this.parts[0].position.y);
+        rotate(this.parts[0].angle);
+        image(bodyImg, -20, 0, 337, 111);
+        pop();
+
+        // for(let i = 0; i < this.suspension.length; i++){
+        //     line(this.suspension[i].bodyA.position.x + this.suspension[i].pointA.x, this.suspension[i].bodyA.position.y + this.suspension[i].pointA.y, this.suspension[i].bodyB.position.x + this.suspension[i].pointB.x, this.suspension[i].bodyB.position.y + this.suspension[i].pointB.y)
+        // }
     }
 }

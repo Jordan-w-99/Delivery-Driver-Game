@@ -2,15 +2,21 @@ let worldWidth = 200000;
 let terrain, vehicle, wall;
 let world, engine;
 let objects = [];
+let bodyImg, wheelImg;
+
+function preload(){
+  bodyImg = loadImage("assets/Body.png");
+  wheelImg = loadImage("assets/Wheel.png");
+}
 
 function setup() {
-  createCanvas(640, 480);
+  createCanvas(windowWidth, windowHeight);
 
   engine = Matter.Engine.create();
   world = engine.world;
 
   terrain = new Terrain();
-  vehicle = new Vehicle(200, -500, 150, 10, 30, color(0,0,0, 70)); // x, y, w, h, wSize, col
+  vehicle = new Vehicle(200, -500, 210, 10, 30, color(0,0,0, 70)); // x, y, w, h, wSize, col
 }
 
 function draw() {
